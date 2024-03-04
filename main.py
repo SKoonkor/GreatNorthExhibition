@@ -109,8 +109,8 @@ if __name__ == "__main__":
     background_folder_path = "background_images"
 
     # # Create a named window with full-screen property
-    # cv2.namedWindow('Video with Green Screen', cv2.WINDOW_NORMAL)
-    # cv2.setWindowProperty('Video with Green Screen', cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
+    cv2.namedWindow('Video with Green Screen', cv2.WINDOW_NORMAL)
+    cv2.setWindowProperty('Video with Green Screen', cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 
     # Load background images
     background_images = load_background_images(background_folder_path)
