@@ -46,10 +46,12 @@ def explore_hsv():
 def load_background_images(folder_path):
     # Load background images from the specified folder path
     background_images = []
-    for filename in glob.glob(folder_path + '/*.jpg'):
-        img = cv2.imread(filename)
-        if img is not None:
-            background_images.append(img)
+    for i in range(len(glob.glob(folder_path + '/*.jpg'))):
+        background_images.append(cv2.imread(background_folder_path + '/{}.jpg'.format(i)))
+    # for filename in glob.glob(folder_path + '/*.jpg'):
+    #     img = cv2.imread(filename)
+    #     if img is not None:
+    #         background_images.append(img)
     return background_images
 
 
@@ -110,9 +112,9 @@ if __name__ == "__main__":
     # cv2.namedWindow('Video with Green Screen', cv2.WINDOW_NORMAL)
     # cv2.setWindowProperty('Video with Green Screen', cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 
-
     # Load background images
     background_images = load_background_images(background_folder_path)
+
     if len(background_images) == 0:
         print(f"Error: No background images found in the folder {background_folder_path}.")
         exit()
@@ -125,15 +127,15 @@ if __name__ == "__main__":
     """
 
     # Index for cycling through background images
-    background_index = 1  # 1 for the normal telescope and 0 for the ELT
+    background_index = 0  # 0 for the normal telescope and 4 for the ELT
 
     # Set the set of desired scale factors for resizing the video frames based on the background image
     # [ELT, NormalTelescope, Newall, Tree, Angel]
-    scale_factors = [0.02, 1, 0.5, 0.13, 0.11]
+    scale_factors = [1, 0.5, 0.13, 0.11, 0.02]
 
     # Set the offsets along the y-axis
-    y_offsets = [1050, 250, 200, 1250, 1450]
-    x_offsets = [210, 50, 70, 190, 45]
+    y_offsets = [250, 200, 1250, 1450, 1050]
+    x_offsets = [50, 70, 190, 45, 210]
 
 
     # Time interval for changing background images (in seconds)
