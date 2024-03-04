@@ -54,7 +54,7 @@ def load_background_images(folder_path):
 
 
 # Function to process the frame and apply green screen effect
-def process_frame(frame, background):
+def process_frame(frame, background, x_position, y_position):
 
     # Convert the frame to HSV color space
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
@@ -76,8 +76,8 @@ def process_frame(frame, background):
     overlay = frame.copy()
 
     # Calculate the position to center the video on the screen
-    y_offset = int((background.shape[0] - overlay.shape[0])) #// 1.033
-    x_offset = int((background.shape[1] - overlay.shape[1])) #// 2.44
+    y_offset = int((background.shape[0] - overlay.shape[0] - y_position)) #// 1.033
+    x_offset = int((background.shape[1] - overlay.shape[1] - x_position)) #// 2.44
 
     overlay[mask != 0] = background[y_offset:y_offset + overlay.shape[0], x_offset:x_offset + overlay.shape[1]][mask != 0] # Set the green color in the frame to be transparent
 
@@ -123,14 +123,21 @@ if __name__ == "__main__":
     """
     Initial Setup 
     """
-    # Set the desired scale factor for resizing the video frames
-    scale_factor = 0.5  # Adjust as needed
 
     # Index for cycling through background images
-    background_index = 1
+    background_index = 1  # 1 for the normal telescope and 0 for the ELT
+
+    # Set the set of desired scale factors for resizing the video frames based on the background image
+    # [ELT, NormalTelescope, Newall, Tree, Angel]
+    scale_factors = [0.02, 1, 0.5, 0.13, 0.11]
+
+    # Set the offsets along the y-axis
+    y_offsets = [1050, 250, 200, 1250, 1450]
+    x_offsets = [210, 50, 70, 190, 45]
+
 
     # Time interval for changing background images (in seconds)
-    change_interval = 5
+    change_interval = 10
 
     # Time variable for tracking the last background change
     last_change_time = time.time()
@@ -142,9 +149,6 @@ if __name__ == "__main__":
         # Flip the frame horizontally
         frame = cv2.flip(frame, 1)
 
-        # Resize the video frame while keeping the background fixed
-        resized_frame = cv2.resize(frame, None, fx=scale_factor, fy=scale_factor)
-
         # Check if it's time to change the background image
         if time.time() - last_change_time >= change_interval:
             # Increment background index and reset if it exceeds the number of images
@@ -152,8 +156,11 @@ if __name__ == "__main__":
             # Update the time of the last background change
             last_change_time = time.time()
 
+        # Resize the video frame while keeping the background fixed
+        resized_frame = cv2.resize(frame, None, fx=scale_factors[background_index], fy=scale_factors[background_index])
+
         # Process the resized frame with the transparent overlay and get the mask
-        result = process_frame(resized_frame, background_images[background_index].copy())
+        result = process_frame(resized_frame, background_images[background_index].copy(), y_offsets[background_index], x_offsets[background_index])
 
         # Display the result in fullscreen
         cv2.imshow('Video with Green Screen', result)
@@ -162,18 +169,19 @@ if __name__ == "__main__":
 
 
 
-        # Check for key events
-        key = cv2.waitKey(1) & 0xFF
         # Check for manual background change
         key = cv2.waitKey(1) & 0xFF
         if ord('0') <= key <= ord('9'):
             index = key - ord('0')
             if index < len(background_images):
                 background_index = index
+            else:
+                background_index = index % len(background_images)
 
         # Check for 'q' key
         if key == ord('q'):
             break
+
 
     # Release video capture object and close all windows
     cap.release()
