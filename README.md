@@ -1,6 +1,6 @@
 # Green Screen @ GreatNorthExhibition
 
-## download the files and install required python packages
+## download the files (by clicking "< > code/ download .zip") and install required python packages
 
 #### Required python3 packages
 1. opencv-python
