@@ -139,7 +139,7 @@ if __name__ == "__main__":
 
 
     # Time interval for changing background images (in seconds)
-    change_interval = 10
+    change_interval = 15
 
     # Time variable for tracking the last background change
     last_change_time = time.time()
