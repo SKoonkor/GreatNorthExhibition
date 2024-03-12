@@ -130,12 +130,12 @@ if __name__ == "__main__":
     background_index = 0  # 0 for the normal telescope and 4 for the ELT
 
     # Set the set of desired scale factors for resizing the video frames based on the background image
-    # [ELT, NormalTelescope, Newall, Tree, Angel]
-    scale_factors = [1, 0.5, 0.13, 0.11, 0.02]
+    # [NormalTelescope, Newall, Tree, Angel, ELT]  #Tree
+    scale_factors = [1, 0.5, 0.11, 0.02]            #[0.13]
 
     # Set the offsets along the y-axis
-    y_offsets = [250, 200, 1250, 1450, 1050]
-    x_offsets = [50, 70, 190, 45, 210]
+    y_offsets = [250, 200, 1450, 1050]            #[1250]
+    x_offsets = [50, 70, 45, 210]                 #[190#
 
 
     # Time interval for changing background images (in seconds)
