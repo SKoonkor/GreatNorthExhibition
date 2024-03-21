@@ -76,6 +76,7 @@ def process_frame(frame, background, x_position, y_position):
 
     # Create a transparent overlay by combining the frame and the background with alpha
     overlay = frame.copy()
+    # print (overlay.shape[0], overlay.shape[1])
 
     # Calculate the position to center the video on the screen
     y_offset = int((background.shape[0] - overlay.shape[0] - y_position)) #// 1.033
@@ -109,8 +110,8 @@ if __name__ == "__main__":
     background_folder_path = "background_images"
 
     # # Create a named window with full-screen property
-    cv2.namedWindow('Video with Green Screen', cv2.WINDOW_NORMAL)
-    cv2.setWindowProperty('Video with Green Screen', cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
+    # cv2.namedWindow('Video with Green Screen', cv2.WINDOW_NORMAL)
+    # cv2.setWindowProperty('Video with Green Screen', cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 
     # Load background images
     background_images = load_background_images(background_folder_path)
@@ -130,16 +131,17 @@ if __name__ == "__main__":
     background_index = 0  # 0 for the normal telescope and 4 for the ELT
 
     # Set the set of desired scale factors for resizing the video frames based on the background image
-    # [NormalTelescope, Newall, Tree, Angel, ELT]  #Tree
-    scale_factors = [1, 0.5, 0.11, 0.02]            #[0.13]
+    #               [Telescope, Newall, Angel,  Cathedral, ISS,    JWST,   ELT]
+    scale_factors = [0.889,     0.247,  0.0791, 0.075,     0.666,  0.137,  0.0296]
 
     # Set the offsets along the y-axis
-    y_offsets = [250, 200, 1450, 1050]            #[1250]
-    x_offsets = [50, 70, 45, 210]                 #[190#
+    #               [Telescope, Newall, Angel,  Cathedral, ISS,    JWST,   ELT]
+    x_offsets =     [279,       561,    854,    890,       501,    834,    989]
+    y_offsets =     [25,        128,    145,    112,       290,    386,    61]
 
 
     # Time interval for changing background images (in seconds)
-    change_interval = 15
+    change_interval = 30
 
     # Time variable for tracking the last background change
     last_change_time = time.time()
@@ -162,7 +164,7 @@ if __name__ == "__main__":
         resized_frame = cv2.resize(frame, None, fx=scale_factors[background_index], fy=scale_factors[background_index])
 
         # Process the resized frame with the transparent overlay and get the mask
-        result = process_frame(resized_frame, background_images[background_index].copy(), y_offsets[background_index], x_offsets[background_index])
+        result = process_frame(resized_frame, background_images[background_index], x_offsets[background_index], y_offsets[background_index])
 
         # Display the result in fullscreen
         cv2.imshow('Video with Green Screen', result)
