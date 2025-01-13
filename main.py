@@ -54,6 +54,11 @@ def load_background_images(folder_path):
     #         background_images.append(img)
     return background_images
 
+def get_time_until_next_change(last_change_time, change_interval):
+    time_elapsed = time.time() - last_change_time
+    time_remaining = max(change_interval - time_elapsed, 0)
+    return int(time_remaining)
+
 
 # Function to process the frame and apply green screen effect
 def process_frame(frame, background, x_position, y_position):
@@ -124,7 +129,7 @@ if __name__ == "__main__":
     cap = cv2.VideoCapture(0)
 
     """
-    Initial Setup 
+    Initial Setup
     """
 
     # Index for cycling through background images
@@ -132,7 +137,7 @@ if __name__ == "__main__":
 
     # Set the set of desired scale factors for resizing the video frames based on the background image
     #               [Telescope, Newall, Angel,  Cathedral, ISS,    JWST,   ELT]
-    scale_factors = [0.889,     0.247,  0.0791, 0.075,     0.666,  0.137,  0.0296]
+    scale_factors = np.array([0.889,     0.247,  0.0791, 0.075,     0.666,  0.137,  0.0296])*0.5
 
     # Set the offsets along the y-axis
     #               [Telescope, Newall, Angel,  Cathedral, ISS,    JWST,   ELT]
@@ -164,7 +169,15 @@ if __name__ == "__main__":
         resized_frame = cv2.resize(frame, None, fx=scale_factors[background_index], fy=scale_factors[background_index])
 
         # Process the resized frame with the transparent overlay and get the mask
-        result = process_frame(resized_frame, background_images[background_index], x_offsets[background_index], y_offsets[background_index])
+        result = process_frame(resized_frame, background_images[background_index].copy(), x_offsets[background_index], y_offsets[background_index])
+
+
+        # Get the time remaining until the next background change
+        time_remaining = get_time_until_next_change(last_change_time, change_interval)
+
+        # Add countdown text to the frame
+        countdown_text = f"Next Image in {time_remaining} s"
+        cv2.putText(result, countdown_text, (1020, 740), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 38, 100), 2)
 
         # Display the result in fullscreen
         cv2.imshow('Video with Green Screen', result)
@@ -282,4 +295,3 @@ if __name__ == "__main__":
     # # Release video capture object and close all windows
     # cap.release()
     # cv2.destroyAllWindows()
-
