@@ -172,8 +172,6 @@ if __name__ == "__main__":
 
 
 
-
-
         # Check for manual background change
         key = cv2.waitKey(1) & 0xFF
         if ord('0') <= key <= ord('9'):
