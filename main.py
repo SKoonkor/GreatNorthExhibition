@@ -97,19 +97,6 @@ def process_frame(frame, background, x_position, y_position):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 if __name__ == "__main__":
     # Specify the folder containing background images
     background_folder_path = "background_images"
@@ -135,14 +122,15 @@ if __name__ == "__main__":
     # Index for cycling through background images
     background_index = 0  # 0 for the normal telescope and 4 for the ELT
 
+    # The Setup below is for Sutti's Lenovo laptop
     # Set the set of desired scale factors for resizing the video frames based on the background image
     #               [Telescope, Newall, Angel,  Cathedral, ISS,    JWST,   ELT]
-    scale_factors = np.array([0.889,     0.247,  0.0791, 0.075,     0.666,  0.137,  0.0296])*0.5
+    scale_factors = np.array([0.889,     0.247,  0.0791, 0.075,     0.666,  0.137,  0.0296])*0.7
 
     # Set the offsets along the y-axis
     #               [Telescope, Newall, Angel,  Cathedral, ISS,    JWST,   ELT]
-    x_offsets =     [279,       561,    854,    890,       501,    834,    989]
-    y_offsets =     [25,        128,    145,    112,       290,    386,    61]
+    x_offsets =     [392,       433,    610,    532,       519,    562,    712]
+    y_offsets =     [14,        100,    102,    128,       220,    310,    49]
 
 
     # Time interval for changing background images (in seconds)
@@ -206,6 +194,15 @@ if __name__ == "__main__":
 
 
 
+
+    # GreatNorth Museum Setup Specification
+    # #               [Telescope, Newall, Angel,  Cathedral, ISS,    JWST,   ELT]
+    # scale_factors = np.array([0.889,     0.247,  0.0791, 0.075,     0.666,  0.137,  0.0296])*0.5
+
+    # # Set the offsets along the y-axis
+    # #               [Telescope, Newall, Angel,  Cathedral, ISS,    JWST,   ELT]
+    # x_offsets =     [279,       561,    854,    890,       501,    834,    989]
+    # y_offsets =     [25,        128,    145,    112,       290,    386,    61]
 
 
 
